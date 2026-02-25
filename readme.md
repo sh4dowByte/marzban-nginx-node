@@ -1,4 +1,4 @@
-## 🧩 Marzban + Nginx
+## 🧩 Marzban + Nginx + Node
 
 **Marzban + Nginx Reverse Proxy** in Docker 🐳
 
@@ -23,7 +23,7 @@ This repository provides a complete setup using **Docker Compose** to run [Marzb
 ├── docker-compose.yml         # Main Docker Compose file
 ├── nginx.conf                 # Main Nginx configuration
 ├── xray.conf                  # Reverse proxy virtual host for all protocols
-├── marzban/      
+├── marzban/  
 │   └── xray_config.json       # Xray configuration (VMess, VLESS, etc.)
 ```
 
@@ -37,35 +37,6 @@ Clone this repository and start the services:
 git clone https://github.com/sh4dowByte/marzban-nginx.git
 cd marzban-nginx
 ```
-
-## 🔐 Using SSL (Certbot)
-
-To automatically obtain and install an SSL certificate from Let's Encrypt:
-
-```bash
-docker compose up certbot
-```
-
-Once completed, the SSL files will be available at:
-
-```bash
-./cert/xray/xray.crt
-./cert/xray/xray.key
-```
-
-Then start the services:
-
-```bash
-docker compose up -d marzban nginx
-```
-
-Make sure your `.env` file is configured:
-
-```env
-CERTBOT_HOSTNAME=your.hostname.com
-CERTBOT_EMAIL=your@email.com
-```
-
 
 ## ☁️ Using Cloudflare Tunnel
 
@@ -123,16 +94,6 @@ https://YOUR_DOMAIN/dashboard
 
 ---
 
-### 🙏 Special Thanks
-
-This project was inspired by and greatly benefited from:
-
-🔗 **[Agunxzzz/MarXray](https://github.com/Agunxzzz/MarXray/tree/main)**
-
-An excellent repository that provides a full setup of Marzban + Nginx + Xray, helping lay the foundation for this project’s automatic integration and robust reverse proxy structure.
-
----
-
-> Thanks to the open-source community for continuously strengthening the Xray and Marzban ecosystem! 💪🚀
+Thanks to the open-source community for continuously strengthening the Xray and Marzban ecosystem! 💪🚀
 
 ---
