@@ -1,0 +1,93 @@
+services:
+  marzban:
+    image: gozargah/marzban:v0.8.4
+    restart: always
+    env_file: .env
+    environment:
+      SQLALCHEMY_DATABASE_URL: "sqlite:////data/db.sqlite3"
+      XRAY_JSON: "/xray_config.json"
+      UVICORN_SSL_CERTFILE: "/cert/marzban.crt"
+      UVICORN_SSL_KEYFILE: "/cert/marzban.key"
+      UVICORN_SSL_CA_CERTS: "/cert/ca.crt"
+    ports:
+      - "8889:8880"
+    volumes:
+      - ./marzban/xray_config.json:/xray_config.json
+      - ./ssl/marzban.crt:/cert/marzban.crt:ro
+      - ./ssl/marzban.key:/cert/marzban.key:ro
+      - ./ssl/ca.crt:/cert/ca.crt:ro
+      - marzban_data:/data         
+    networks:
+      - marzban_net
+    depends_on:
+      - dns
+
+  marzban-node:
+    image: gozargah/marzban-node:latest
+    restart: always
+    environment:
+      SERVICE_ADDRESS: "https://marzban:8880"
+      SSL_CLIENT_CERT_FILE: "/cert/ssl_client_cert.pem"
+    depends_on:
+      - marzban
+      - dns
+    networks:
+      - marzban_net
+    ports:
+      - "62051:62050"
+    volumes:
+      - marzban_node_data:/var/lib/marzban-node
+      - ./ssl/ssl_client_cert.pem:/cert/ssl_client_cert.pem:ro
+
+  nginx:
+    image: nginx:alpine
+    restart: always
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./xray.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - marzban
+      - marzban-node
+    networks:
+      - marzban_net
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    env_file: .env
+    restart: always
+    command: tunnel --no-autoupdate run --token ${TUNNEL_TOKEN}
+    depends_on:
+      - nginx
+      - marzban
+    networks:
+      - marzban_net
+
+  dns:
+    image: cloudflare/cloudflared:latest
+    command: >
+      proxy-dns
+      --address 0.0.0.0
+      --port 5053
+      --upstream https://cloudflare-dns.com/dns-query
+      --upstream https://dns.google/dns-query
+    restart: unless-stopped
+    networks:
+      - marzban_net
+
+networks:
+  marzban_net:
+    driver: bridge
+
+volumes:
+  marzban_data:
+  marzban_node_data:
+
+x-casaos:
+    author: sh4dowByte
+    category: Utilities
+    hostname: marmin.juhdi.my.id/dashboard
+    icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/marzban.png
+    scheme: https
+    title:
+        custom: Marzban V2Ray Server
+        en_us: Marzban V2Ray Server
