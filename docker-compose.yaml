@@ -19,8 +19,6 @@ services:
       - marzban_data:/data         
     networks:
       - marzban_net
-    depends_on:
-      - dns
 
   marzban-node:
     image: gozargah/marzban-node:latest
@@ -30,7 +28,6 @@ services:
       SSL_CLIENT_CERT_FILE: "/cert/ssl_client_cert.pem"
     depends_on:
       - marzban
-      - dns
     networks:
       - marzban_net
     ports:
@@ -59,18 +56,6 @@ services:
     depends_on:
       - nginx
       - marzban
-    networks:
-      - marzban_net
-
-  dns:
-    image: cloudflare/cloudflared:latest
-    command: >
-      proxy-dns
-      --address 0.0.0.0
-      --port 5053
-      --upstream https://cloudflare-dns.com/dns-query
-      --upstream https://dns.google/dns-query
-    restart: unless-stopped
     networks:
       - marzban_net
 
