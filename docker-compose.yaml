@@ -67,12 +67,3 @@ volumes:
   marzban_data:
   marzban_node_data:
 
-x-casaos:
-    author: sh4dowByte
-    category: Utilities
-    hostname: marmin.juhdi.my.id/dashboard
-    icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/marzban.png
-    scheme: https
-    title:
-        custom: Marzban V2Ray Server
-        en_us: Marzban V2Ray Server
