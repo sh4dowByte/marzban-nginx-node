@@ -1,6 +1,6 @@
 ## 🧩 Marzban + Nginx + Node
 
-**Marzban + Nginx Reverse Proxy** in Docker 🐳
+**Marzban + Nginx Reverse Prox + Nodey** in Docker 🐳
 
 This repository provides a complete setup using **Docker Compose** to run [Marzban](https://github.com/Gozargah/Marzban) (an Xray management panel) with **Nginx reverse proxy** and **SSL certificate** support.
 
@@ -34,16 +34,16 @@ This repository provides a complete setup using **Docker Compose** to run [Marzb
 Clone this repository and start the services:
 
 ```bash
-git clone https://github.com/sh4dowByte/marzban-nginx.git
-cd marzban-nginx
+git clone https://github.com/sh4dowByte/marzban-nginx-node.git
+cd marzban-nginx-node
 ```
 
 ## ☁️ Using Cloudflare Tunnel
 
-To run Marzban + Nginx + Cloudflare Tunnel (without exposing public ports):
+To run Marzban + Nginx + Cloudflare Tunnel:
 
 ```bash
-docker compose up -d marzban nginx cloudflared
+docker compose up -d
 ```
 
 Ensure your `.env` file contains your Cloudflare Tunnel token:
@@ -60,7 +60,7 @@ Want to access your **Marzban panel** securely without exposing ports? Use **Clo
 
 ### 🌐 Example:
 
-![1750807168500](image/readme/1750807168500.png)
+![cloudflared_pub_routes](image/cloudflared_pub_routes.png)
 
 Access Marzban at:
 
@@ -68,13 +68,60 @@ Access Marzban at:
 https://YOUR_DOMAIN/dashboard
 ```
 
+
+---
+
+### ⚙️ Marzban Node Settings Example:
+![marzban_node](image/marzban_node.png)
+
+After setting up the node, make sure to properly configure the SSL certificate.
+
+### 📂 File Location
+
+Navigate to the following file:
+
+```
+ssl/ssl_client_cert.pem
+```
+
+### ✏️ Steps
+
+1. Open the **Marzban Panel Dashboard**
+2. Go to **Node / Connection Settings**
+3. Find the **SSL Client Certificate**
+4. Copy the entire certificate content
+5. Open the file:
+
+```
+ssl/ssl_client_cert.pem
+```
+
+6. Replace all contents of the file with the copied certificate
+7. Save the file
+
+### ⚠️ Important Notes
+
+* Make sure the format remains valid (usually starts with):
+
+  ```
+  -----BEGIN CERTIFICATE-----
+  ```
+
+  and ends with:
+
+  ```
+  -----END CERTIFICATE-----
+  ```
+* Do not add extra spaces or characters
+* Use UTF-8 encoding without BOM
+
 ---
 
 ### ⚙️ Marzban Panel Settings Example:
 
 | VMESS                                          | VLESS                                          | TROJAN                                         |
 | ---------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- |
-| ![1750776686305](image/readme/1750776686305.png) | ![1750776700384](image/readme/1750776700384.png) | ![1750776717274](image/readme/1750776717274.png) |
+| ![vmess](image/vmess.png) | ![vless](image/vless.png) | ![trojan](image/trojan.png) |
 
 ---
 
